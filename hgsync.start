@@ -1,0 +1,21 @@
+#!/bin/sh
+
+function hgsync() {
+	### Clone Mecurial repository
+	hg clone http://hg.code.sf.net/p/kissfft/code kissfft-code
+	cd kissfft-code
+	git init 
+	git remote add origin https://github.com/ralic/kissfft-code
+	git config core.ignoreCase false
+	../fast-export/hg-fast-export.sh -r .
+	git add * -f 
+	git add .hg* -f 
+
+	## Add Git commit message
+	git commit
+	# git commit -m "Update from source : https://sourceforge.net/p/kissfft/code/ci/default/tree/"
+	git push --set-upstream origin master --force
+	cd ..
+	# rm -rf kissfft-code
+}
+hgsync
